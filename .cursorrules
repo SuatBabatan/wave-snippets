@@ -1,0 +1,26 @@
+# Wave Snippets Development Guide
+
+## Running the Development Server
+
+To start the development server:
+
+1. Navigate to the client directory:
+   ```bash
+   cd packages/client
+   ```
+
+2. Start the development server:
+   ```bash
+   yarn dev
+   ```
+
+The server will start at http://localhost:3000
+
+## Features Available Without Firebase
+
+- Create and edit code snippets
+- Add multiple steps to your snippets
+- Choose from different themes and languages
+- Preview your snippets
+
+Note: Some features like authentication, saving snippets, and exporting to GIF/video will not work without Firebase configuration. 
