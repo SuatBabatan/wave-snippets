@@ -23,4 +23,31 @@ The server will start at http://localhost:3000
 - Choose from different themes and languages
 - Preview your snippets
 
-Note: Some features like authentication, saving snippets, and exporting to GIF/video will not work without Firebase configuration. 
+Note: Some features like authentication, saving snippets, and exporting to GIF/video will not work without Firebase configuration.
+
+## Export Functionality Details
+
+The export feature uses the following flow:
+
+1. UI calls `/api/queue/media-export` endpoint with:
+   - Snippet ID
+   - Email addresses
+   - Quality settings (low/medium/high)
+
+2. Firebase Functions Process:
+   - Uses Puppeteer (headless browser) to record snippet animation
+   - Creates MP4 version (always)
+   - Creates GIF version (unless high quality is selected)
+   - Uploads files to Firebase Storage
+   - Sends email with download links
+
+### Local Development Requirements for Export
+
+To implement export locally without Firebase, you would need:
+1. Local Express server with:
+   - `puppeteer` for browser automation
+   - `ffmpeg` for video processing
+   - `gif.js` or similar for GIF creation
+2. Replace email delivery with direct file downloads
+
+The main difference in local implementation would be immediate file downloads instead of email delivery. 
