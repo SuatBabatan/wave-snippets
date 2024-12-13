@@ -3,13 +3,12 @@
 const proxy = require('http-proxy-middleware')
 
 module.exports = function (app) {
-  // Temporarily disabled proxy for local development without Firebase
-  // app.use(
-  //   '/api',
-  //   proxy({
-  //     target: process.env.REACT_APP_CLOUD_FUNCTIONS_URL,
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/api': '' },
-  //   }),
-  // )
+  app.use(
+    '/api',
+    proxy({
+      target: 'http://localhost:5001',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    }),
+  )
 }

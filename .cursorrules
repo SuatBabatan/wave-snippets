@@ -16,38 +16,57 @@ To start the development server:
 
 The server will start at http://localhost:3000
 
+## Running with Firebase Emulators (Optional)
+
+If you want to use Firebase features locally:
+
+1. Switch to Node.js 18 for Firebase tools:
+   ```bash
+   use-firebase
+   ```
+
+2. Initialize Firebase emulators (first time only):
+   ```bash
+   firebase init emulators
+   ```
+   Select the following emulators:
+   - Firestore Emulator
+   - Storage Emulator
+   - Functions Emulator (optional)
+
+3. Start the Firebase emulators:
+   ```bash
+   firebase emulators:start
+   ```
+
+4. In a separate terminal, switch back to Node.js 10.21.0:
+   ```bash
+   nvm use 10.21.0
+   ```
+
+5. Start the development server:
+   ```bash
+   cd packages/client && yarn dev
+   ```
+
 ## Features Available Without Firebase
+- Code snippet creation and editing
+- Syntax highlighting
+- Step-by-step code walkthrough
+- Basic UI functionality
 
-- Create and edit code snippets
-- Add multiple steps to your snippets
-- Choose from different themes and languages
-- Preview your snippets
+## Features Requiring Firebase
+- User authentication
+- Saving snippets to cloud
+- Sharing snippets
+- Analytics
 
-Note: Some features like authentication, saving snippets, and exporting to GIF/video will not work without Firebase configuration.
+## Node.js Version Management
+The project uses two Node.js versions:
+- Node.js 10.21.0 for the application (default)
+- Node.js 18 for Firebase Tools
 
-## Export Functionality Details
+To switch between versions:
+- `nvm use 10.21.0` - Switch to application version
+- `use-firebase` - Switch to Firebase version
 
-The export feature uses the following flow:
-
-1. UI calls `/api/queue/media-export` endpoint with:
-   - Snippet ID
-   - Email addresses
-   - Quality settings (low/medium/high)
-
-2. Firebase Functions Process:
-   - Uses Puppeteer (headless browser) to record snippet animation
-   - Creates MP4 version (always)
-   - Creates GIF version (unless high quality is selected)
-   - Uploads files to Firebase Storage
-   - Sends email with download links
-
-### Local Development Requirements for Export
-
-To implement export locally without Firebase, you would need:
-1. Local Express server with:
-   - `puppeteer` for browser automation
-   - `ffmpeg` for video processing
-   - `gif.js` or similar for GIF creation
-2. Replace email delivery with direct file downloads
-
-The main difference in local implementation would be immediate file downloads instead of email delivery. 

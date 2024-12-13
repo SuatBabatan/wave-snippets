@@ -12,68 +12,35 @@ type ExportMenuProps = {
   isDisabled?: boolean
 }
 
-// const createEmbed = (snippetID: string) => `<iframe
-//   src="${location.origin}/embed/${snippetID}"
-//   style="width:646px; height:450px; border:0; overflow:hidden;"
-//   sandbox="allow-scripts allow-same-origin">
-// </iframe>
-// `
-
-export const ExportMenu: FC<ExportMenuProps> = () => {
-  // const embedURL = snippetID ? createEmbed(snippetID) : 'No snippet exists'
+export const ExportMenu: FC<ExportMenuProps> = ({ snippetID }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { steps, tags, defaultLanguage } = useSnippetState()
-  // const { onCopy, hasCopied } = useClipboard(embedURL)
-  // const toast = useCreateToast()
+  const { steps, tags, defaultLanguage, saveOrCreateSnippet } = useSnippetState()
 
-  // useEffect(() => {
-  //   if (hasCopied) {
-  //     toast(
-  //       <Box>
-  //         <Text>Embed copied to clipboard!</Text>
-  //       </Box>,
-  //     )
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [hasCopied])
+  const handleExport = async () => {
+    analytics.logEvent('snippet_export_modal_opened', {
+      language: defaultLanguage,
+      numberOfSteps: steps.length,
+      snippetTags: tags,
+    })
+
+    // Save the snippet first if it doesn't exist
+    const id = snippetID || await saveOrCreateSnippet({ force: true })
+    onOpen()
+  }
 
   return (
     <>
-      {/* Just doing media exports for now. */}
-      {/* <Menu>
-        <MenuButton
-          as={Button}
-          // @ts-ignore
-          isDisabled={isDisabled}
-          isLoading={isLoading}
-          // @ts-ignore
-          rightIcon="chevron-down"
-        >
-          Export...
-        </MenuButton>
-        <MenuList zIndex={1000}>
-          <MenuItem isDisabled={!snippetID} onClick={onCopy}>
-            Embed <Badge ml="4">Beta</Badge>
-          </MenuItem>
-          <MenuItem onClick={onOpen}>Export GIF/MP4</MenuItem>
-        </MenuList>
-      </Menu> */}
-
       <Button
         isDisabled={steps.length <= 1}
-        onClick={() => {
-          analytics.logEvent('snippet_export_modal_opened', {
-            language: defaultLanguage,
-            numberOfSteps: steps.length,
-            snippetTags: tags,
-          })
-
-          onOpen()
-        }}
+        onClick={handleExport}
       >
         Export
       </Button>
-      <ExportModal isOpen={isOpen} onClose={onClose} />
+      <ExportModal 
+        isOpen={isOpen} 
+        onClose={onClose} 
+        snippetID={snippetID || ''} 
+      />
     </>
   )
 }
